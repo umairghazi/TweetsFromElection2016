@@ -52,15 +52,15 @@ MongoClient.connect(url, function(err, db) {
         console.log("Query -- collection.find({}) -- will return all the document from collection.");
         var collection = db.collection('streamdata');
         // Find some documents 
-        collection.find({"tweet.id":3653083512}).toArray(function(err, docs) {
+        collection.find({}).toArray(function(err, docs) {
             assert.equal(err, null);
             console.log("Found the following records...");
             console.dir(docs);
         });
 
-        console.log("Query -- collection.find({'tweet.text': {$all:[/*trump.*/]}}) -- will return all the document containing the word trump.".magenta);
+        console.log("Query -- collection.find({'tweet.text': {$all:[/*trump.*/]}}) -- will return all the document containing the word trump and hate.".magenta);
         // var collection = db.collection('streamdata');
-        collection.find({"tweet.text":{$all:[/.*trump.*/ , /.*hate.*/]}}).toArray(function(err, docs) {
+        collection.find({"tweet.text":{$all:[/.*trump.*/ , /.*hillary.*/]}}).toArray(function(err, docs) {
             //db.streamdata.find({"tweet.text" : {$all:[ /.*trump.*/, /.*hate.*/]}});
             assert.equal(err, null);
             console.log("Found the following records...");
@@ -68,19 +68,6 @@ MongoClient.connect(url, function(err, db) {
         });
     }
 });
-
-
-// var findAllDocuments = function(db, callback) {
-//     // Get the documents collection 
-//     var collection = db.collection('streamdata');
-//     // Find some documents 
-//     collection.find({}).toArray(function(err, docs) {
-//         assert.equal(err, null);
-//         console.log("Found the following records...");
-//         console.dir(docs);
-//     });
-// }
-
 
 
 
