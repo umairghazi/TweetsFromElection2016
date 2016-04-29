@@ -11,6 +11,6 @@ We decided to fetch the tweets about the US Presidential Elections 2016 as the t
 3. Start up the mongod daemon process `>mongod` in terminal with `dbpath` of `data` directory provided in the application. Example: `mongod --dbpath *pathToWhereEverYouHaveDownloadedThisApplication*/twitterlivestream/data/`
 3. Start another terminal window in the `twitterlivestream` directory and type `npm start`
 4. The terminal will show the application connecting to local mongodb instance running on the machine and outputting the data from some sample queries such as `collection.find({})` which will return all the documents from the database and `collection.find({"tweet.text":{$all:[/.*trump.*/ , /.*hillary.*/]}})` which will return the documents having tweets containing words trump and hillary. 
-5. If you want to download more data to the database with the live streaming API, then you need to un-comment lines 75-108 and run the application again using `npm start` command in terminal. 
+5. If you want to download more data to the database with the live streaming API, then you need to un-comment lines 75-108 in app.js and run the application again using `npm start` command in terminal. 
 
 
