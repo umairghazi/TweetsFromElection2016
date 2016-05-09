@@ -9,8 +9,8 @@
 6 silly lifecycle twitterlivestream@0.0.0~prestart: no script for prestart, continuing
 7 info lifecycle twitterlivestream@0.0.0~start: twitterlivestream@0.0.0
 8 verbose lifecycle twitterlivestream@0.0.0~start: unsafe-perm in lifecycle true
-9 verbose lifecycle twitterlivestream@0.0.0~start: PATH: /Users/umairghazi/.nvm/versions/node/v4.2.6/lib/node_modules/npm/bin/node-gyp-bin:/Users/umairghazi/Desktop/KRT Project Pilot/twitterlivestream/node_modules/.bin:/Users/umairghazi/.nvm/versions/node/v4.2.6/bin:/Users/umairghazi/.nvm/versions/node/v4.2.6/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
-10 verbose lifecycle twitterlivestream@0.0.0~start: CWD: /Users/umairghazi/Desktop/KRT Project Pilot/twitterlivestream
+9 verbose lifecycle twitterlivestream@0.0.0~start: PATH: /Users/umairghazi/.nvm/versions/node/v4.2.6/lib/node_modules/npm/bin/node-gyp-bin:/Users/umairghazi/Desktop/twitterlivestream/node_modules/.bin:/Users/umairghazi/.nvm/versions/node/v4.2.6/bin:/Users/umairghazi/.nvm/versions/node/v4.2.6/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+10 verbose lifecycle twitterlivestream@0.0.0~start: CWD: /Users/umairghazi/Desktop/twitterlivestream
 11 silly lifecycle twitterlivestream@0.0.0~start: Args: [ '-c', 'node ./bin/www' ]
 12 silly lifecycle twitterlivestream@0.0.0~start: Returned: code: 1  signal: null
 13 info lifecycle twitterlivestream@0.0.0~start: Failed to exec start script
@@ -25,7 +25,7 @@
 14 verbose stack     at maybeClose (internal/child_process.js:821:16)
 14 verbose stack     at Process.ChildProcess._handle.onexit (internal/child_process.js:211:5)
 15 verbose pkgid twitterlivestream@0.0.0
-16 verbose cwd /Users/umairghazi/Desktop/KRT Project Pilot/twitterlivestream
+16 verbose cwd /Users/umairghazi/Desktop/twitterlivestream
 17 error Darwin 14.5.0
 18 error argv "/Users/umairghazi/.nvm/versions/node/v4.2.6/bin/node" "/Users/umairghazi/.nvm/versions/node/v4.2.6/bin/npm" "start"
 19 error node v4.2.6

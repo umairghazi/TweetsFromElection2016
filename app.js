@@ -6,6 +6,10 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var colors = require('colors');
 var twitter = require('ntwitter');
+var autocomplete = require('autocomplete');
+
+
+
 var credentials = require('./credentials.js');
 var t = new twitter({
     consumer_key: credentials.consumer_key,
@@ -26,6 +30,8 @@ var routes = require('./routes/index');
 var users = require('./routes/users');
 
 var app = express();
+app.use(express.static(path.join(__dirname, 'public')));
+
 var locations = {
     sf: '-122.75,36.8,-121.75,37.8',
     nyc: '-74,40,-73,41',
@@ -38,41 +44,41 @@ var MongoClient = require('mongodb').MongoClient,
     assert = require('assert');
 
 // Connection URL 
-var url = 'mongodb://localhost:27017/twitterstream';
-// Use connect method to connect to the Server 
-console.log("Connecting to local mongodb instance at port 27017....".bgCyan);
-MongoClient.connect(url, function(err, db) {
-    if (err) {
-        console.log("Couldn't connect to mongodb :(. Please make sure there is a mongod instance running.".bgRed);
-        console.log("Exiting..");
-        process.exit();
-    } else {
-        console.log(colors.bgGreen.underline("Connected to mongodb successfully :)"));
-        console.log("Running sample queries...");
-        console.log("Query -- collection.find({}) -- will return all the document from collection.");
-        var collection = db.collection('streamdata');
-        // Find some documents 
-        collection.find({}).toArray(function(err, docs) {
-            assert.equal(err, null);
-            console.log("Found the following records...");
-            console.dir(docs);
-        });
+// var url = 'mongodb://localhost:27017/twitterstream';
+// // Use connect method to connect to the Server 
+// console.log("Connecting to local mongodb instance at port 27017....".bgCyan);
+// MongoClient.connect(url, function(err, db) {
+//     if (err) {
+//         console.log("Couldn't connect to mongodb :(. Please make sure there is a mongod instance running.".bgRed);
+//         console.log("Exiting..");
+//         process.exit();
+//     } else {
+//         console.log(colors.bgGreen.underline("Connected to mongodb successfully :)"));
+//         console.log("Running sample queries...");
+//         console.log("Query -- collection.find({}) -- will return all the document from collection.");
+//         var collection = db.collection('streamdata');
+//         // Find some documents 
+//         collection.find({}).toArray(function(err, docs) {
+//             assert.equal(err, null);
+//             console.log("Found the following records...");
+//             console.dir(docs);
+//         });
 
-        console.log("Query -- collection.find({'tweet.text': {$all:[/*trump.*/]}}) -- will return all the document containing the word trump and hate.".magenta);
-        // var collection = db.collection('streamdata');
-        collection.find({"tweet.text":{$all:[/.*trump.*/ , /.*hillary.*/]}}).toArray(function(err, docs) {
-            //db.streamdata.find({"tweet.text" : {$all:[ /.*trump.*/, /.*hate.*/]}});
-            assert.equal(err, null);
-            console.log("Found the following records...");
-            console.dir(docs);
-        });
-    }
-});
+//         console.log("Query -- collection.find({'tweet.text': {$all:[/*trump.*/]}}) -- will return all the document containing the word trump and hate.".magenta);
+//         // var collection = db.collection('streamdata');
+//         collection.find({"tweet.text":{$all:[/.*trump.*/ , /.*hillary.*/]}}).toArray(function(err, docs) {
+//             //db.streamdata.find({"tweet.text" : {$all:[ /.*trump.*/, /.*hate.*/]}});
+//             assert.equal(err, null);
+//             console.log("Found the following records...");
+//             console.dir(docs);
+//         });
+//     }
+// });
 
 
 
 //Below code is to connect to twitterstream API and download the live tweets to the mongo database
-//console.log("Connecting to local mongodb instance at port 27017....".yellow);
+// console.log("Connecting to local mongodb instance at port 27017....".yellow);
 // var server = new Server('localhost', 27017, {auto_reconnect: true});
 // db = new Db('twitterstream', server);
 // db.open(function (err, db) {
@@ -84,7 +90,7 @@ MongoClient.connect(url, function(err, db) {
 //     assert.equal(null, err);
 //     t.stream('statuses/filter', {
 //             language: "en",
-//             track: ["Donald Trump","Hillary Clinton","Bernie Sanders","Elections 2016","US Presidential Elections"]
+//             track: ["Donald Trump","Hillary Clinton","Bernie Sanders","Elections 2016","US Presidential Elections","Democrats","Republicans"]
 //         }, function (stream) {
 //             stream.on('data', function (tweet) {
 //                 var dataToSave = {};
@@ -120,8 +126,17 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(function(req,res,next){
+    req.Db = Db;
+    next();
+});
+
+
+
+//--------------
+
 app.use('/', routes);
-app.use('/users', users);
+app.use('/search', users);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

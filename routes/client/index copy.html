@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Search Mongo</title>
+    <link rel="stylesheet" type="text/css" href="css/bootcards-desktop.css">
+    <link rel="stylesheet" type="text/css" href="css/bootcards-demo-app.css">
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-2.2.3.js" integrity="sha256-laXWtGydpwqJ8JA+X9x2miwmaiKhn8tVmOVEigRNtP4=" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="col-sm-5 bootcards-list" id="list" data-title="Contacts">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="search-form">
+                        <div class="row">
+                            <div class="col-xs-9">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Search Contacts...">
+                                    <i class="fa fa-search"></i>
+                                </div>
+                            </div>
+                            <div class="col-xs-3">
+                                <a class="btn btn-primary btn-block" href="/contacts/add" data-toggle="modal" data-target="#editModal">
+                                    <i class="fa fa-plus"></i>
+                                    <span>Add</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-group">
+                    <a class="list-group-item pjax active" href="/contacts/VBMJHwcLX3Vx">
+                        <!-- <img src="/images/Sofia Acey.jpg" class="img-rounded pull-left"> -->
+                        <h4 class="list-group-item-heading">Acey, Sofia</h4>
+                        <p class="list-group-item-text">Masung Corp.</p>
+                    </a>
+                    <a class="list-group-item pjax" href="/contacts/sH5PxrdzkZ3T">
+                        <!-- <img src="/images/Joseph Barish.jpg" class="img-rounded pull-left"> -->
+                        <h4 class="list-group-item-heading">Barish, Joseph</h4>
+                        <p class="list-group-item-text">Masung Corp.</p>
+                    </a>
+                    <a class="list-group-item pjax" href="/contacts/s9RSWs87B4qv">
+                        <!-- <img src="/images/Jerry Bess.jpg" class="img-rounded pull-left"> -->
+                        <h4 class="list-group-item-heading">Bess, Jerry</h4>
+                        <p class="list-group-item-text">ZetaComm</p>
+                    </a>
+                    <a class="list-group-item pjax" href="/contacts/eNK2QXWJa8E3">
+                        <!-- <img src="/images/Jamie Biddy.jpg" class="img-rounded pull-left"> -->
+                        <h4 class="list-group-item-heading">Biddy, Jamie</h4>
+                        <p class="list-group-item-text">Masung Corp.</p>
+                    </a>
+                    <a class="list-group-item pjax" href="/contacts/kNQv7Urv7AzX">
+                        <!-- <img src="/images/Mark Booth.jpg" class="img-rounded pull-left"> -->
+                        <h4 class="list-group-item-heading">Booth, Mark</h4>
+                        <p class="list-group-item-text">Burning Core</p>
+                    </a>
+                    <a class="list-group-item pjax" href="/contacts/HZTBeGFQCzPs">
+                        <!-- <img src="/images/Sharon Burns.jpg" class="img-rounded pull-left"> -->
+                        <h4 class="list-group-item-heading">Burns, Sharon</h4>
+                        <p class="list-group-item-text">Derenden Systems</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-7 bootcards-cards hidden-xs" id="listDetails">
+
+                <!--contact details & notes-->
+                
+                <div id="contactCard">
+                    
+                    <div class="panel panel-default">
+                        <div class="panel-heading clearfix">
+                            <h3 class="panel-title pull-left">Contact Details</h3>
+                            <div class="btn-group pull-right visible-xs">
+                                <a class="btn btn-primary" href="/contacts/VBMJHwcLX3Vx/edit"
+                                    data-toggle="modal"
+                                    data-target="#editModal">
+                                    <i class="fa fa-pencil"></i>
+                                    <span>Edit</span>
+                                </a>
+                            </div>  
+                            <a class="btn btn-primary pull-right hidden-xs" href="/contacts/VBMJHwcLX3Vx/edit"
+                                data-toggle="modal"
+                                data-target="#editModal">
+                                <i class="fa fa-pencil"></i>
+                                <span>Edit</span>
+                            </a>
+                        </div>
+                        <div class="list-group">
+                            <div class="list-group-item">
+                                <img src="/images/Sofia Acey.jpg" class="img-rounded pull-left"/>
+                                <label>Name</label>
+                                <h4 class="list-group-item-heading">Acey, Sofia</h4>
+                            </div>
+                            <div class="list-group-item">
+                                <label>Company</label>
+                                <h4 class="list-group-item-heading">Masung Corp.</h4>
+                            </div>
+                            <div class="list-group-item">
+                                <label>Job Title</label>
+                                <h4 class="list-group-item-heading">Finance Director (ZCT)</h4>
+                            </div>
+                            <div class="list-group-item">
+                                <label>Department</label>
+                                <h4 class="list-group-item-heading">Finance</h4>
+                            </div>
+                            <a class="list-group-item" href="tel://+1 650-555-0055">
+                                <label>Phone</label>
+                                <h4 class="list-group-item-heading">+1 650-555-0055</h4>
+                            </a>
+                            <a class="list-group-item" href="mailto:Sofia.Acey@masung.com">
+                                <label>Email</label>
+                                <h4 class="list-group-item-heading">Sofia.Acey@masung.com</h4>
+                            </a>
+                        </div>
+                        <div class="panel-footer">
+                            <small class="pull-left">Built with Bootcards - Base Card</small>
+                            <a class="btn btn-link btn-xs pull-right"
+                                            href="/snippets/base-card-form"
+                                            data-toggle="modal"
+                                            data-target="#docsModal">
+                                            View Source</a>
+                        </div>      
+                    </div>
+                
+                </div>
+        <script type="text/javascript" src="js/bootcards.js"></script>
+        <script type="text/javascript" src="js/jquery.pjax.min.js"></script>
+        <script type="text/javascript" src="js/bootcards-demo-app.js"></script>
+        <script src="js/script.js"></script>
+        <script type="text/javascript">
+        //highlight first list group option (if non active yet)
+        if ($('.list-group a.active').length === 0) {
+            $('.list-group a').first().addClass('active');
+        }
+
+        bootcards.init({
+            offCanvasHideOnMainClick: true,
+            offCanvasBackdrop: true,
+            enableTabletPortraitMode: true,
+            disableRubberBanding: true,
+            disableBreakoutSelector: 'a.no-break-out'
+        });
+        </script>
+</body>
+
+</html>
