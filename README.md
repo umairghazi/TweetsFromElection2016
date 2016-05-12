@@ -23,7 +23,8 @@ We decided to fetch the tweets about the US Presidential Elections 2016 as the t
 4. While both node server and mongod instance are running, head over to `http://localhost:3000/search/home`. The web page with search box will appear. 
 5. Enter any string separated by spaces related to the topic of Elections 2016. The client will make an AJAX call to the backend API at  `http://localhost:3000/search/search?string=` and will add the search words to the URL. 
 6. The backend returns the list of documents from MongoDB in the JSON format which the frontend script placed at public/js/script.js folder gets and iterates over and appends to the DOM. 
-7. On clicking each of the tweet in the list, you get the detailed card showing more details about the tweet on the right. 
+7. On clicking each of the tweet in the list, you get the detailed card showing more details about the tweet on the right.
+8. At the end of the tweet details, there is an input box where you can add the comments. For now, the comments will be visible by refreshing the page and loading the tweets again. 
 
 ### Challenges we ran into 
 
@@ -31,4 +32,6 @@ We decided to fetch the tweets about the US Presidential Elections 2016 as the t
 
 2. CORS issue - Once we started building client and started making AJAX calls to the backend, the browser refused to use the resource due to Cross-origin resource sharing issue. This happened even after serving the client on the same domain. Finally, we had to set header at server level to allow Cross-origin resource sharing. 
 
-3. Node's MongoDb driver not finding documents with numbers - We couldn't make queries to MongoDb with numbers such as collection.find({"tweet.id":70665841}) or collection.find( "_id" : ObjectId("5722c2ab19f8390004d6ea96"), even though the same queries worked when using mongo client from terminal. This needs to be investigated. 
+3. ~~Node's MongoDb driver not finding documents with numbers - We couldn't make queries to MongoDb with numbers such as collection.find({"tweet.id":70665841}) or collection.find( "_id" : ObjectId("5722c2ab19f8390004d6ea96"), even though the same queries worked when using mongo client from terminal. This needs to be investigated.~~
+**Resolved** - The issue was with the paramaters being passed as the string and mongo driver was looking into the database for a string entry whereas tweet id was a number. Type converting using the javascript function `parseInt()` resolved this.  
+
