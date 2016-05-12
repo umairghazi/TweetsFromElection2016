@@ -56,3 +56,11 @@ body.fullscreen {
   width:100%;
   z-index:1000;
 }
+
+#printComment{
+  text-align: left;
+}
+
+#printTime{
+  text-align: right;
+}

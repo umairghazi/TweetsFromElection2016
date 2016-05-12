@@ -1,10 +1,16 @@
 var express = require('express');
 var router = express.Router();
 var mongo = require('mongodb');
+var bodyParser = require("body-parser");
 var Server = mongo.Server;
-var autocomplete = require('autocomplete');
 var path = require('path');
 var cors = require('cors');
+
+// var monk = require('monk');
+// var db = monk('localhost:27017/twitterstream');
+var ObjectId = require('mongodb').ObjectID;
+
+var assert = require('assert');
 var app = express();
 
 
@@ -60,7 +66,7 @@ router.get('/search', function(req, res) {
     var query = req.query.string;
     console.log(query);
     var regEx = new Array();
-    if (typeof query === 'string' ) {
+    if (typeof query === 'string') {
         regEx.push(new RegExp(".*" + query + ".*"));
     } else {
         for (str in query) {
@@ -78,34 +84,62 @@ router.get('/search', function(req, res) {
             process.exit();
         } else {
             var collection = db.collection('streamdata');
-            collection.find({ "tweet.text": { $all: regEx } },{limit:5000}).toArray(function(e, docs) {
+            collection.find({ "tweet.text": { $all: regEx } }, { limit: 5000 }).toArray(function(e, docs) {
                 res.json(docs);
+                db.close();
             });
         }
     });
 });
 
-//************Couldn't get the below method to work as mongo won't find numbers for some reason ******* // 
-// router.get('/getTweetData/:tweetId', function(req, res) {
-// 	var id = req.params.tweetId;
-//     var MongoClient = require('mongodb').MongoClient;
-//     var url = 'mongodb://localhost:27017/twitterstream';
-//     MongoClient.connect(url, function(err, db) {
-//         if (err) {
-//             res.send("Couldn't connect to mongodb :(. Please make sure there is a mongod instance running.".bgRed);
-//             res.send("Exiting..");
-//             process.exit();
-//         } else {
-//             var collection = db.collection('streamdata');
-//             console.log(id);	
-//             collection.find({"tweet.id": id}).toArray(function(e, docs) {
-//             	console.log(docs);
-//                 res.json(docs);
-//             });
-//         }
-//     });
-// });
+router.get('/getTweetData/:tweetId', function(req, res) {
+    var id = parseInt(req.params.tweetId);
+    var MongoClient = require('mongodb').MongoClient;
+    var url = 'mongodb://localhost:27017/twitterstream';
+    MongoClient.connect(url, function(err, db) {
+        if (err) {
+            res.send("Couldn't connect to mongodb :(. Please make sure there is a mongod instance running.");
+            res.send("Exiting..");
+            process.exit();
+        } else {
+            var collection = db.collection('streamdata');
+            collection.find({ "tweet.id": id }).toArray(function(e, docs) {
+                res.json(docs);
+                db.close();
+            });
+        }
+    });
+});
 
+
+router.post('/postComment', function(req,res){
+    var id = req.body.id;
+    var comment = req.body.comment;
+    var time = req.body.time;
+    console.log(id + " | " + comment + " | " + time);
+     var MongoClient = require('mongodb').MongoClient;
+    var url = 'mongodb://localhost:27017/twitterstream';
+    MongoClient.connect(url, function(err, db) {
+        if (err) {
+            res.send("Couldn't connect to mongodb :(. Please make sure there is a mongod instance running.");
+            res.send("Exiting..");
+            process.exit();
+        } else {
+            var collection = db.collection('streamdata');
+            collection.update({"_id": ObjectId(id)}, {$push: {"tweet.comment": {"comment":comment,time:time}}}, function(err,count){
+                if(err){
+                    console.log(err);
+                }else{
+                    console.log(count);
+                    res.json({inserted:true,count:count});
+                    db.close();
+                }
+            });
+        }
+
+    });
+
+});
 
 
 module.exports = router;

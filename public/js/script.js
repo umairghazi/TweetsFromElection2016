@@ -3,7 +3,7 @@ had to setup a global array as a workaround as mongo didn't
 search using ids and numbers.
 */
 var globalArray = new Array(); 
-
+var globalDetailedCard = "";
 
 /*
 The magic happens here. 
@@ -61,12 +61,12 @@ function createTweetList(objectId,profilePicture,userName,tweetTextShort){
 //on click of each item in tweet list, below method is called to 
 //show more details of a tweet.
 function createDetailedCard(data){
-
+console.log(data);
 var id = $(data).attr('data-tweetId');
 for(obj in globalArray){
 	if(globalArray[obj]._id == id){
 		console.log(globalArray[obj]);
-		var objectId 		= globalArray[obj].tweet._id;
+		var objectId 		= globalArray[obj]._id;
 		var profilePicture  = globalArray[obj].tweet.profileImage;
 		var userName 		= globalArray[obj].tweet.userName;
 		var tweetText    	= globalArray[obj].tweet.text;
@@ -77,10 +77,21 @@ for(obj in globalArray){
 		var tweetTime 	    = globalArray[obj].tweet.createdAt;
 		var source	 	    = globalArray[obj].tweet.source;
 		var location		= globalArray[obj].tweet.location;
-
-
+		var comments 		= globalArray[obj].tweet.comment;
+		console.log(comments);
+		var displayComment 	= "<ul>";
+		
+		
+		if(comments){
+			for(comment in comments){
+			displayComment += "<li>"+comments[comment].comment + "&nbsp&nbsp&nbsp" + comments[comment].time.substr(0,25)+"</li>";
+		}
+		}else{
+			displayComment += "0 commments. Start the conversation...";
+		}
+		displayComment+= "</ul>";
 		//html template for detailed tweet card
-		var detailCard = '<div class="col-sm-7 bootcards-cards hidden-xs" id="listDetails">'+
+		globalDetailedCard = '<div class="col-sm-7 bootcards-cards hidden-xs" id="listDetails">'+
 				
 				'<div id="contactCard">'+
 					'<div class="panel panel-default">'+
@@ -89,6 +100,7 @@ for(obj in globalArray){
 							'<div class="btn-group pull-right visible-xs">'+
 							'</div>	'+
 						'</div>'+
+
 						'<div class="list-group">'+
 							'<div class="list-group-item">'+
 								'<img src="'+profilePicture+'" onerror="imgError(this);" class="img-rounded pull-left">'+
@@ -111,12 +123,34 @@ for(obj in globalArray){
 								'<label>Location</label>'+
 								'<h4 class="list-group-item-heading">'+ location +'</h4>'+
 							'</div>'+
+							'<div class="list-group-item">'+
+								'<label>Comments</label>'+
+								'<p class="list-group-item-heading">'+ displayComment +'</p>'+
+							'<div class="panel-body">'+
+								'<div class="search-form">'+
+									'<div class="row">'+
+							    		'<div class="col-xs-9">'+
+									      '<div class="form-group">'+
+										      '<input type="text" class="form-control" id="comment" placeholder="Add comments...">'+
+									      '</div>'+
+							    		'</div>'+
+									    '<div class="col-xs-3">'+
+											'<a class="btn btn-primary btn-block" data-objid= '+ objectId +' onclick="submitComment(this);">'+
+												'<i class="fa fa-plus"></i> '+
+												'<span>Add</span>'+
+											'</a>'+
+									    '</div>'+
+									'</div>	'+					    
+								'</div>	'+
+								'</div>'+				
+							'</div>'+
 						'</div>	'+	
 					'</div>'+
 				'</div>'+
 			'</div>';
+
 			$("#listDetails").remove();
-			$("#cardsGoHere").append(detailCard);
+			$("#cardsGoHere").append(globalDetailedCard);
 			}
 		}
 	}
@@ -128,4 +162,23 @@ function imgError(image) {
     image.onerror = "";
     image.src = "/images/placeholder.jpg";
     return true;
+}
+
+
+function submitComment(e){
+	var tweetId = $(e).attr('data-objid');
+	var comment = $("#comment").val();
+	var data = {id:tweetId,comment:comment,time: new Date()};
+	
+	$.ajax({
+      type: 'POST',
+      url: "http://127.0.0.1:3000/search/postComment",
+      data: data,   
+      success: function(resultData) { 
+      	console.log(resultData);
+      },
+      error: function(data){
+      	console.log("error");
+      }
+  });
 }

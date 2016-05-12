@@ -6,9 +6,6 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var colors = require('colors');
 var twitter = require('ntwitter');
-var autocomplete = require('autocomplete');
-
-
 
 var credentials = require('./credentials.js');
 var t = new twitter({
