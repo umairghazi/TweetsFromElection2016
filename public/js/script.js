@@ -3,7 +3,7 @@ had to setup a global array as a workaround as mongo didn't
 search using ids and numbers.
 */
 var globalArray = new Array(); 
-var globalDetailedCard = "";
+
 
 /*
 The magic happens here. 
@@ -78,20 +78,19 @@ for(obj in globalArray){
 		var source	 	    = globalArray[obj].tweet.source;
 		var location		= globalArray[obj].tweet.location;
 		var comments 		= globalArray[obj].tweet.comment;
-		console.log(comments);
 		var displayComment 	= "<ul>";
 		
-		
-		if(comments){
-			for(comment in comments){
+		for(comment in comments){
 			displayComment += "<li>"+comments[comment].comment + "&nbsp&nbsp&nbsp" + comments[comment].time.substr(0,25)+"</li>";
 		}
+		if(comments){
+			
 		}else{
 			displayComment += "0 commments. Start the conversation...";
 		}
 		displayComment+= "</ul>";
 		//html template for detailed tweet card
-		globalDetailedCard = '<div class="col-sm-7 bootcards-cards hidden-xs" id="listDetails">'+
+		var detailCard = '<div class="col-sm-7 bootcards-cards hidden-xs" id="listDetails">'+
 				
 				'<div id="contactCard">'+
 					'<div class="panel panel-default">'+
@@ -149,8 +148,27 @@ for(obj in globalArray){
 				'</div>'+
 			'</div>';
 
+	// var addComment = '<div class="panel-body">'+
+	// 					'<div class="search-form">'+
+	// 						'<div class="row">'+
+	// 						    '<div class="col-xs-9">'+
+	// 						      '<div class="form-group">'+
+	// 							      '<input type="text" class="form-control" placeholder="...">'+
+	// 							      '<i class="fa fa-search"></i>'+
+	// 						      '</div>'+
+	// 						    '</div>'+
+	// 						    '<div class="col-xs-3">'+
+	// 								'<a class="btn btn-primary btn-block" href="/contacts/add" data-toggle="modal" data-target="#editModal">'+
+	// 									'<i class="fa fa-plus"></i> '+
+	// 									'<span>Add</span>'+
+	// 								'</a>'+
+	// 						    '</div>'+
+	// 						'</div>	'+					    
+	// 					'</div>	'+				
+	// 				'</div>';
+
 			$("#listDetails").remove();
-			$("#cardsGoHere").append(globalDetailedCard);
+			$("#cardsGoHere").append(detailCard);
 			}
 		}
 	}
@@ -176,6 +194,7 @@ function submitComment(e){
       data: data,   
       success: function(resultData) { 
       	console.log(resultData);
+      	
       },
       error: function(data){
       	console.log("error");

@@ -93,7 +93,7 @@ router.get('/search', function(req, res) {
 });
 
 router.get('/getTweetData/:tweetId', function(req, res) {
-    var id = parseInt(req.params.tweetId);
+    var id = req.params.tweetId;
     var MongoClient = require('mongodb').MongoClient;
     var url = 'mongodb://localhost:27017/twitterstream';
     MongoClient.connect(url, function(err, db) {
@@ -103,7 +103,7 @@ router.get('/getTweetData/:tweetId', function(req, res) {
             process.exit();
         } else {
             var collection = db.collection('streamdata');
-            collection.find({ "tweet.id": id }).toArray(function(e, docs) {
+            collection.find({ "_id": ObjectId(id) }).toArray(function(e, docs) {
                 res.json(docs);
                 db.close();
             });

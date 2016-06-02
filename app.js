@@ -40,9 +40,9 @@ var locations = {
 var MongoClient = require('mongodb').MongoClient,
     assert = require('assert');
 
-// Connection URL 
+// Connection URL
 // var url = 'mongodb://localhost:27017/twitterstream';
-// // Use connect method to connect to the Server 
+// // Use connect method to connect to the Server
 // console.log("Connecting to local mongodb instance at port 27017....".bgCyan);
 // MongoClient.connect(url, function(err, db) {
 //     if (err) {
@@ -54,7 +54,7 @@ var MongoClient = require('mongodb').MongoClient,
 //         console.log("Running sample queries...");
 //         console.log("Query -- collection.find({}) -- will return all the document from collection.");
 //         var collection = db.collection('streamdata');
-//         // Find some documents 
+//         // Find some documents
 //         collection.find({}).toArray(function(err, docs) {
 //             assert.equal(err, null);
 //             console.log("Found the following records...");
@@ -90,6 +90,7 @@ var MongoClient = require('mongodb').MongoClient,
 //             track: ["Donald Trump","Hillary Clinton","Bernie Sanders","Elections 2016","US Presidential Elections","Democrats","Republicans"]
 //         }, function (stream) {
 //             stream.on('data', function (tweet) {
+//                 console.log(tweet);
 //                 var dataToSave = {};
 //                 dataToSave.id = tweet.user.id;
 //                 dataToSave.userName = tweet.user.name;
