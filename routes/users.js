@@ -1,3 +1,4 @@
+var http = require('http');
 var express = require('express');
 var router = express.Router();
 var mongo = require('mongodb');
@@ -5,16 +6,65 @@ var bodyParser = require("body-parser");
 var Server = mongo.Server;
 var path = require('path');
 var cors = require('cors');
+var Twit = require('twit');
 
-// var monk = require('monk');
-// var db = monk('localhost:27017/twitterstream');
+var credentials = require('../credentials.js');
+var T = new Twit({
+    consumer_key: credentials.consumer_key,
+    consumer_secret: credentials.consumer_secret,
+    access_token: credentials.access_token_key,
+    access_token_secret: credentials.access_token_secret
+});
+
 var ObjectId = require('mongodb').ObjectID;
 
 var assert = require('assert');
 var app = express();
+app.set('port',3100);
 
+var server = http.createServer(app).listen(
+  app.get('port'), function() {
+    console.log('Express server listening on port ' +
+    app.get('port'));
+});
+var filters = {
+  language : "en",
+  track: ["Donald Trump","Hillary Clinton","Bernie Sanders","Elections 2016","US Presidential Elections","Democrats","Republicans"]
+};
+var io = require('socket.io').listen(server);
+var stream = T.stream('statuses/filter',filters);
+var serv = new Server('localhost', 27017, {auto_reconnect: true});
+var Db = mongo.Db;
+var db = new Db('twitterstream', serv);
+var socketlist = [];
+db.open(function (err, db) {
+io.sockets.on('connection', function (socket) {
+  socketlist.push(socket);
+  stream.on('tweet', function(tweet) {
+    var dataToSave = {};
+    dataToSave.id = tweet.user.id;
+    dataToSave.userName = tweet.user.name;
+    dataToSave.location = tweet.user.location;
+    dataToSave.profileImage = tweet.user.profile_image_url;
+    dataToSave.coordinates = tweet.coordinates;
+    dataToSave.createdAt = tweet.created_at;
+    dataToSave.text = tweet.text;
+    dataToSave.source = tweet.source;
+    dataToSave.tweetId = tweet.id;
+    db.collection('streamdata', function (err, collection) {
+      collection.insert({'tweet': dataToSave}, {safe: true}, function (err, result) {
+      });
+    });
+    socket.emit('info', { tweet: dataToSave });
+  });
+});
+});
 
+io.sockets.on('end', function (){
+  // socket.disconnect('unauthorized');
+  io.httpServer.close();
 
+});
 /* Following will get all the 20K tweets from database. USE WITH CAUTION */
 // router.get('/search', function(req, res, next) {
 //     var MongoClient = require('mongodb').MongoClient;
@@ -32,7 +82,7 @@ var app = express();
 //             console.log("Running sample queries...");
 //             console.log("Query -- collection.find({}) -- will return all the document from collection.");
 //             var collection = db.collection('streamdata');
-//             // Find some documents 
+//             // Find some documents
 //             collection.find({ "tweet.userName": "Allie4Cruz" }).toArray(function(err, docs) {
 //                 assert.equal(err, null);
 //                 console.log("Found the following records...");
@@ -53,6 +103,13 @@ router.get('/home', cors(), function(req, res) {
     res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
     res.header('Access-Control-Allow-Headers', 'Content-Type');
     res.sendFile(path.join(__dirname + '/client/index.html'));
+});
+
+router.get('/tweetsforui', cors(), function(req, res) {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    res.sendFile(path.join(__dirname + '/client/fetchTweets.html'));
 });
 
 //*** MAGIC happens here *** //

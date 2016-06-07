@@ -5,40 +5,31 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var colors = require('colors');
-var twitter = require('ntwitter');
+// var twitter = require('ntwitter');
+var Twit = require('twit');
 
 var credentials = require('./credentials.js');
-var t = new twitter({
+var T = new Twit({
     consumer_key: credentials.consumer_key,
     consumer_secret: credentials.consumer_secret,
-    access_token_key: credentials.access_token_key,
+    access_token: credentials.access_token_key,
     access_token_secret: credentials.access_token_secret
 });
 
 var mongo = require('mongodb');
-var Server = mongo.Server,
-    Db = mongo.Db,
-    assert = require('assert'),
-    BSON = mongo.BSONPure;
-
-
+var MongoClient = require('mongodb').MongoClient;
+var Server = mongo.Server;
+var Db = mongo.Db;
+var assert = require('assert');
+var BSON = mongo.BSONPure;
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
 var app = express();
+
 app.use(express.static(path.join(__dirname, 'public')));
 
-var locations = {
-    sf: '-122.75,36.8,-121.75,37.8',
-    nyc: '-74,40,-73,41',
-    all: '-180,-90,180,90'
-};
-
-
-
-var MongoClient = require('mongodb').MongoClient,
-    assert = require('assert');
 
 // Connection URL
 // var url = 'mongodb://localhost:27017/twitterstream';

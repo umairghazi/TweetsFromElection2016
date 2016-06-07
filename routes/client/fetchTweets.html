@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Search Mongo</title>
+    <link rel="stylesheet" type="text/css" href="/css/demo.css">
+    <link rel="stylesheet" type="text/css" href="/css/form-search.css">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.2/css/font-awesome.min.css">
+    <script src="https://code.jquery.com/jquery-2.2.3.js" integrity="sha256-laXWtGydpwqJ8JA+X9x2miwmaiKhn8tVmOVEigRNtP4=" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="/js/script.js"></script>
+    <script src="/js/socket.io.js"></script>
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- You only need this form and the form-search.css -->
+
+        <header>
+            <h1>Download Tweets</h1>
+        </header>
+
+        <div class="bs-example " data-example-id="simple-help-text">
+            <a class="btn btn-default btn-sm" id="btn-half-left" onclick="downloadTweets();">
+                <i class="fa fa-download fa-lg"></i> Download and Watch Tweets</a>
+            <a class="btn btn-default btn-sm" id="btn-half-right" onclick="stopTweets();">
+                <i class="fa fa-stop"></i> Stop Download </a>
+        </div>
+    </div>
+    <div id="content"></div>
+    <script>
+    var socket = io.connect('localhost:3100');
+    function downloadTweets() {
+      socket.on('info', function (data) {
+        var dis = JSON.stringify(data, null, 4);
+        $('#content').append(dis + "<hr/>");
+      });
+    }
+    function stopTweets() {
+      socket.emit('end');
+    }
+
+    </script>
+</body>
+
+</html>

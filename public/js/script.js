@@ -2,12 +2,12 @@
 had to setup a global array as a workaround as mongo didn't
 search using ids and numbers.
 */
-var globalArray = new Array(); 
+var globalArray = new Array();
 
 
 /*
-The magic happens here. 
-The search string is split into an array with all the strings 
+The magic happens here.
+The search string is split into an array with all the strings
 entered by the user and sent to the backend.
 */
 
@@ -34,7 +34,7 @@ function sa(e){
 			$("#tweetList").empty(); //clear the div if it contains anything
 			var tweetCardList = new Array();
 			$(data).each(function(index){
-				globalArray.push(data[index]); //send everything to globalarray 
+				globalArray.push(data[index]); //send everything to globalarray
 				var objectId = data[index]._id;
 				var profilePicture = data[index].tweet.profileImage;
 				var userName = data[index].tweet.userName;
@@ -58,7 +58,7 @@ function createTweetList(objectId,profilePicture,userName,tweetTextShort){
 
 }
 
-//on click of each item in tweet list, below method is called to 
+//on click of each item in tweet list, below method is called to
 //show more details of a tweet.
 function createDetailedCard(data){
 console.log(data);
@@ -79,19 +79,19 @@ for(obj in globalArray){
 		var location		= globalArray[obj].tweet.location;
 		var comments 		= globalArray[obj].tweet.comment;
 		var displayComment 	= "<ul>";
-		
+
 		for(comment in comments){
 			displayComment += "<li>"+comments[comment].comment + "&nbsp&nbsp&nbsp" + comments[comment].time.substr(0,25)+"</li>";
 		}
 		if(comments){
-			
+
 		}else{
 			displayComment += "0 commments. Start the conversation...";
 		}
 		displayComment+= "</ul>";
 		//html template for detailed tweet card
 		var detailCard = '<div class="col-sm-7 bootcards-cards hidden-xs" id="listDetails">'+
-				
+
 				'<div id="contactCard">'+
 					'<div class="panel panel-default">'+
 						'<div class="panel-heading clearfix">'+
@@ -139,11 +139,11 @@ for(obj in globalArray){
 												'<span>Add</span>'+
 											'</a>'+
 									    '</div>'+
-									'</div>	'+					    
+									'</div>	'+
 								'</div>	'+
-								'</div>'+				
+								'</div>'+
 							'</div>'+
-						'</div>	'+	
+						'</div>	'+
 					'</div>'+
 				'</div>'+
 			'</div>';
@@ -163,8 +163,8 @@ for(obj in globalArray){
 	// 									'<span>Add</span>'+
 	// 								'</a>'+
 	// 						    '</div>'+
-	// 						'</div>	'+					    
-	// 					'</div>	'+				
+	// 						'</div>	'+
+	// 					'</div>	'+
 	// 				'</div>';
 
 			$("#listDetails").remove();
@@ -174,7 +174,7 @@ for(obj in globalArray){
 	}
 
 
-//if an image doesn't exist, below methods replaces the image with 
+//if an image doesn't exist, below methods replaces the image with
 //a placeholder image
 function imgError(image) {
     image.onerror = "";
@@ -187,14 +187,14 @@ function submitComment(e){
 	var tweetId = $(e).attr('data-objid');
 	var comment = $("#comment").val();
 	var data = {id:tweetId,comment:comment,time: new Date()};
-	
+
 	$.ajax({
       type: 'POST',
       url: "http://127.0.0.1:3000/search/postComment",
-      data: data,   
-      success: function(resultData) { 
+      data: data,
+      success: function(resultData) {
       	console.log(resultData);
-      	
+
       },
       error: function(data){
       	console.log("error");
